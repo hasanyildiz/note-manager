@@ -1,4 +1,0 @@
---patch-module
-org.manager.note=_
---add-reads
-org.manager.note=ALL-UNNAMED
