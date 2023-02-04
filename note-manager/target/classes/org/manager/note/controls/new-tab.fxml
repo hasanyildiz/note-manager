@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Tab fx:id="tab" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" >
+    <content>
+        <TextArea fx:id="textArea" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="139.0" VBox.vgrow="ALWAYS" />
+    </content>
+
+</Tab>
