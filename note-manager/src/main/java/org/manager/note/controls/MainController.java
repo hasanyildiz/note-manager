@@ -10,6 +10,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Objects;
 
 public class MainController {
     @FXML
@@ -44,6 +45,8 @@ public class MainController {
         fileChooser.setInitialDirectory(new File((String) System.getProperties().get("user.home")));
 
         File selectedFile = fileChooser.showOpenDialog(tabs.getScene().getWindow());
+
+        if(Objects.isNull(selectedFile)) return;
 
         String content = Files.readString(selectedFile.toPath());
 
