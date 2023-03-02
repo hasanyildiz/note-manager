@@ -1,11 +1,13 @@
 package org.manager.note.controls;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+import org.manager.note.constant.Shortcuts;
+import org.manager.note.util.TextUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +29,9 @@ public class MainController {
 
     @FXML
     public void addNewTab() throws IOException {
-        tabs.getTabs().add(createTab("New Tab"));
+        Tab tab = createTab("New Tab");
+
+        tabs.getTabs().add(tab);
     }
 
     private Tab createTab(String title) throws IOException {
@@ -35,7 +39,31 @@ public class MainController {
 
         tab.setText(title);
 
+        TextArea textArea = (TextArea) tab.getContent();
+
+        textArea.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if(Shortcuts.FORMAT.getShortcut().match(event)) {
+                try {
+                    if(textArea.getText().isBlank()) return;
+
+                    if(tab.getText().endsWith(".xml")) textArea.setText(TextUtils.formatXml(textArea.getText()));
+                    // other extensions
+                } catch (Exception e) {
+                    createAlert(Alert.AlertType.ERROR, "Input not valid", "An unknown error has occurred: " + e.getMessage()).showAndWait();
+                }
+                event.consume();
+            }
+        });
+
         return tab;
+    }
+
+    private Alert createAlert(Alert.AlertType type, String title, String desc) {
+        Alert alert = new Alert(type);
+        alert.setHeaderText(title);
+        alert.setContentText(desc);
+
+        return alert;
     }
 
     @FXML
