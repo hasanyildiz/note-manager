@@ -1,11 +1,14 @@
 package org.manager.note.controls;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
+import lombok.extern.log4j.Log4j2;
 import org.manager.note.constant.Shortcuts;
 import org.manager.note.util.TextUtils;
 
@@ -14,12 +17,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Objects;
 
+@Log4j2
 public class MainController {
     @FXML
     public void initialize(){
         try {
             addNewTab();
+            log.debug("app initialized");
         } catch (IOException e) {
+            log.error("initialization error: " + e.getMessage());
             throw new RuntimeException(e);
         }
     }
