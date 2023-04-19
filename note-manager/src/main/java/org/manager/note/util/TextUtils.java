@@ -1,5 +1,7 @@
 package org.manager.note.util;
 
+import javafx.scene.control.IndexRange;
+import javafx.scene.control.TextArea;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -67,5 +69,19 @@ public final class TextUtils {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         return digest.digest(
                 raw.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public static IndexRange calculateIndexRange(TextArea textArea){
+        String text = textArea.getText();
+        int start = 0;
+        if(StringUtils.isEmpty(text)){
+            return new IndexRange(0,0);
+        }
+
+        return new IndexRange(start, text.length());
+    }
+
+    public static void setText(TextArea textArea,String text){
+        textArea.replaceText(TextUtils.calculateIndexRange(textArea),text);
     }
 }

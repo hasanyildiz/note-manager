@@ -59,7 +59,7 @@ public class MainController {
 
                                 if (result.isPresent() && result.get() == ButtonType.OK) {
                                     TextArea textArea = (TextArea) nv.getContent();
-                                    textArea.setText(content);
+                                    TextUtils.setText(textArea, content);
                                     tabInfo.setFileHash(TextUtils.hashText(content));
                                 }
                                 log.info("text is changed for tab:{} and file:{}",nv.getId(),tabInfo.getRelatedFile().getAbsolutePath());
@@ -100,8 +100,8 @@ public class MainController {
             if(Shortcuts.FORMAT.getShortcut().match(event)) {
                 try {
                     if(textArea.getText().isBlank()) return;
-
-                    if(tab.getText().endsWith(".xml")) textArea.setText(TextUtils.formatXml(textArea.getText()));
+                   ;
+                    if(tab.getText().endsWith(".xml"))  TextUtils.setText(textArea, TextUtils.formatXml(textArea.getText()));
                     // other extensions
                 } catch (Exception e) {
                     createAlert(Alert.AlertType.ERROR, "Input not valid", "An unknown error has occurred: " + e.getMessage()).showAndWait();
@@ -180,13 +180,13 @@ public class MainController {
     public void base64Encode(ActionEvent actionEvent) {
         Tab tab = tabs.getTabs().get(selectedTabIndex);
         TextArea textArea = (TextArea) tab.getContent();
-        textArea.setText(TextUtils.base64Encode(textArea.getText(), false));
+        TextUtils.setText(textArea,TextUtils.base64Encode(textArea.getText(), false));
     }
 
     public void base64EncodeWithPadding(ActionEvent actionEvent) {
         Tab tab = tabs.getTabs().get(selectedTabIndex);
         TextArea textArea = (TextArea) tab.getContent();
-        textArea.setText(TextUtils.base64Encode(textArea.getText(), true));
+        TextUtils.setText(textArea,TextUtils.base64Encode(textArea.getText(), true));
     }
 
     public void base64EncodeByLine(ActionEvent actionEvent) {
