@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
@@ -109,8 +110,21 @@ public class MainController {
             }else if(Shortcuts.SAVE.getShortcut().match(event)){
                 String text = textArea.getText();
                 try {
-                    Files.write(tabInfo.getRelatedFile().toPath(), text.getBytes(StandardCharsets.UTF_8));
-                } catch (IOException e) {
+                    if(tabInfo.getRelatedFile()==null || !Files.exists(Paths.get(tabInfo.getRelatedFile().getAbsolutePath() ))){
+                        File fileToSave = openSaveDialog();
+                        if(fileToSave!=null){
+                            Files.write(fileToSave.toPath(), text.getBytes(StandardCharsets.UTF_8));
+                            tabInfo.setTabHeader(fileToSave.getName());
+                            tabInfo.setRelatedFile(fileToSave);
+                            tabInfo.setFileHash(TextUtils.hashText(text));
+                            tab.setText(tabInfo.getTabHeader());
+                        }
+                    }else{
+                        Files.write(tabInfo.getRelatedFile().toPath(), text.getBytes(StandardCharsets.UTF_8));
+                        tabInfo.setFileHash(TextUtils.hashText(text));
+                    }
+
+                } catch (IOException | NoSuchAlgorithmException e) {
                     log.error(e.getMessage(),e);
                 }
             }
@@ -133,6 +147,14 @@ public class MainController {
         alert.setContentText(desc);
 
         return alert;
+    }
+
+    public File openSaveDialog(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File fileToSave = fileChooser.showSaveDialog(tabs.getScene().getWindow());
+        return fileToSave;
     }
 
     @FXML
