@@ -33,23 +33,37 @@ public class MainController {
                 TabInfo tabInfo = tabInfos.get(nv.getId());
                 if(tabInfo!=null && tabInfo.getRelatedFile()!=null){
                     try {
-                        String content = FileUtils.readFileContent(tabInfo.getRelatedFile());
-                        byte[] hashedText = TextUtils.hashText(content);
-                        if(!Arrays.equals(hashedText, tabInfo.getFileHash())){
-                            Alert alert =
-                                    new Alert(Alert.AlertType.WARNING,
-                                            "file is changed. Do you want to reload it?\n path:"+tabInfo.getRelatedFile().getAbsolutePath(),
-                                            ButtonType.OK,
-                                            ButtonType.CANCEL);
-                            alert.setTitle("File is changed");
+                        if(!Files.exists(tabInfo.getRelatedFile().toPath())){
+                            log.info("file is removed:{}",tabInfo.getRelatedFile().getAbsolutePath());
+                            Alert alert = new Alert(Alert.AlertType.WARNING,
+                                    "file is removed. Do you remove it from this tab?\n path:"+tabInfo.getRelatedFile().getAbsolutePath(),
+                                    ButtonType.OK,
+                                    ButtonType.CANCEL);
+                            alert.setTitle("File is removed");
                             Optional<ButtonType> result = alert.showAndWait();
-
-                            if (result.isPresent() && result.get() == ButtonType.OK) {
-                                TextArea textArea = (TextArea) nv.getContent();
-                                textArea.setText(content);
-                                tabInfo.setFileHash(TextUtils.hashText(content));
+                            if(result.isPresent() && result.get() == ButtonType.OK){
+                                tabs.getTabs().remove(nv);
+                                tabInfos.remove(tabInfo.getTabId());
                             }
-                            log.info("text is changed for tab:"+nv.getText());
+                        }else{
+                            String content = FileUtils.readFileContent(tabInfo.getRelatedFile());
+                            byte[] hashedText = TextUtils.hashText(content);
+                            if(!Arrays.equals(hashedText, tabInfo.getFileHash())){
+                                Alert alert = new Alert(Alert.AlertType.WARNING,
+                                                "file is changed. Do you want to reload it?\n path:"+tabInfo.getRelatedFile().getAbsolutePath(),
+                                                ButtonType.OK,
+                                                ButtonType.CANCEL);
+                                alert.setTitle("File is changed");
+                                Optional<ButtonType> result = alert.showAndWait();
+
+                                if (result.isPresent() && result.get() == ButtonType.OK) {
+                                    TextArea textArea = (TextArea) nv.getContent();
+                                    textArea.setText(content);
+                                    tabInfo.setFileHash(TextUtils.hashText(content));
+                                }
+                                log.info("text is changed for tab:{} and file:{}",nv.getId(),tabInfo.getRelatedFile().getAbsolutePath());
+                        }
+
                         }
                     } catch (IOException | NoSuchAlgorithmException e) {
                         log.error(e.getMessage(), e);
