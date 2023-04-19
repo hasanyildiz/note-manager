@@ -21,9 +21,11 @@
                         <MenuItem mnemonicParsing="false" text="Delete"/>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu mnemonicParsing="false" text="Base64">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Delete"/>
+                        <MenuItem mnemonicParsing="false" text="Encode" onAction="#base64Encode"/>
+                        <MenuItem mnemonicParsing="false" text="Encode With Padding" onAction="#base64EncodeWithPadding"/>
+                        <MenuItem mnemonicParsing="false" text="Encode By Line" onAction="#base64EncodeByLine"/>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -33,7 +35,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <TabPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:id="tabs">
+        <TabPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" fx:id="tabs" >
             <tabs>
             </tabs>
         </TabPane>

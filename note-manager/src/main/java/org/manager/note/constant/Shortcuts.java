@@ -6,7 +6,8 @@ import javafx.scene.input.KeyCombination;
 import lombok.Getter;
 
 public enum Shortcuts {
-    FORMAT(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+    FORMAT(new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN)),
+    SAVE(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
     @Getter
     private final KeyCombination shortcut;
